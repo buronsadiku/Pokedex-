@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Header from './components/Header'
-import PokemonList from './components/PokemonList'
+import PokemonGrid from './components/PokemonGrid'
 import PokemonDetails from './components/PokemonDetails'
 import Search from './components/Search'
 import TypesBar from './components/TypesBar'
+import ErrorBoundary from './components/ErrorBoundary'
 
 /**
  * EXPLANATION:
@@ -47,9 +48,16 @@ function App() {
             path="/" 
             element={
               <>
-                <Search onSearchChange={handleSearchChange} onSortChange={handleSortChange} />
+                <Search 
+                  searchTerm={searchTerm}
+                  sortBy={sortBy}
+                  onSearchChange={handleSearchChange} 
+                  onSortChange={handleSortChange} 
+                />
                 <TypesBar selectedType={selectedType} onTypeChange={handleTypeChange} />
-                <PokemonList searchTerm={searchTerm} selectedType={selectedType} sortBy={sortBy} />
+                <ErrorBoundary>
+                  <PokemonGrid searchTerm={searchTerm} selectedType={selectedType} sortBy={sortBy} />
+                </ErrorBoundary>
               </>
             } 
           />

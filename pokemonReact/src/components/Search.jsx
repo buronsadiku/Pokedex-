@@ -1,13 +1,32 @@
-import React, { useState } from "react";
+import React from "react";
 
-export default function Search({ onSearchChange, onSortChange }) {
-    const [searchTerm, setSearchTerm] = useState("");
-    const [sortBy, setSortBy] = useState("id-asc");
+/**
+ * REFACTORED: Search Component
+ * 
+ * CHANGES MADE:
+ * 1. Removed local state (searchTerm, sortBy)
+ * 2. Made this a fully "controlled component"
+ * 3. Parent (App.jsx) now owns the state
+ * 
+ * WHY THIS IS BETTER:
+ * - Single Source of Truth: State lives in one place (App.jsx)
+ * - No State Duplication: Was maintaining state here AND in parent
+ * - Simpler Logic: Just calls callbacks, doesn't manage state
+ * - Easier Debugging: All state is in App, not scattered
+ * 
+ * CONTROLLED COMPONENT PATTERN:
+ * A controlled component doesn't manage its own state.
+ * It receives current values as props and calls callbacks to request changes.
+ * This is the React-recommended pattern for forms.
+ * 
+ * BEFORE: Search had its own state + notified parent (2 sources of truth)
+ * AFTER: Search just displays what parent tells it (1 source of truth)
+ */
 
+export default function Search({ searchTerm = "", sortBy = "id-asc", onSearchChange, onSortChange }) {
     const handleSearchChange = (e) => {
         const value = e.target.value;
-        setSearchTerm(value);
-        // Pass the search term to parent component
+        // Just notify parent, don't manage state locally
         if (onSearchChange) {
             onSearchChange(value);
         }
@@ -15,8 +34,7 @@ export default function Search({ onSearchChange, onSortChange }) {
 
     const handleSortChange = (e) => {
         const value = e.target.value;
-        setSortBy(value);
-        // Pass the sort option to parent component
+        // Just notify parent, don't manage state locally
         if (onSortChange) {
             onSortChange(value);
         }
